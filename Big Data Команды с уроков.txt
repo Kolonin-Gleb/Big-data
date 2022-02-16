@@ -66,3 +66,6 @@ TRUNCATE TABLE goods; -- Обнулит автоинкремент
 
 
 
+
+
+

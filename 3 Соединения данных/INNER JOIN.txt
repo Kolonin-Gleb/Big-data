@@ -1,0 +1,15 @@
+SELECT * from hr.employees;
+
+SELECT * FROM hr.departments;
+
+
+CREATE TABLE emp_dep AS
+SELECT 
+    emp.FIRST_NAME,
+    dep.DEPARTMENT_NAME
+FROM hr.employees emp
+INNER JOIN hr.departments dep
+ON emp.DEPARTMENT_ID = dep.DEPARTMENT_ID;
+
+SELECT * FROM emp_dep;
+
