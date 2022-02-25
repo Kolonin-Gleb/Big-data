@@ -1,0 +1,39 @@
+SELECT * FROM HR.DEPARTMENTS;
+SELECT * FROM HR.EMPLOYEES;
+
+-- LEFT JOINS
+-- Конструкция JOIN позволяет объединять более 2 таблиц за раз
+
+SELECT
+HR.EMPLOYEES.FIRST_NAME as fn,
+HR.EMPLOYEES.LAST_NAME as ln,
+HR.DEPARTMENTS.DEPARTMENT_NAME as dn
+FROM HR.EMPLOYEES
+LEFT JOIN HR.DEPARTMENTS
+ON HR.EMPLOYEES.DEPARTMENT_ID = HR.DEPARTMENTS.DEPARTMENT_ID
+
+-- Названия департаментов, где есть сотрудники с ЗП > 15000
+
+SELECT
+HR.DEPARTMENTS.DEPARTMENT_NAME as dn
+--, HR.EMPLOYEES.EMPLOYEE_ID -- Служит для проверки
+FROM HR.DEPARTMENTS
+LEFT JOIN HR.EMPLOYEES
+ON HR.EMPLOYEES.DEPARTMENT_ID = HR.DEPARTMENTS.DEPARTMENT_ID
+where HR.EMPLOYEES.SALARY > 15000;
+
+-- В ON нужно указывать то, как объединяются данные
+-- В WHERE нужно указать условие, по которому объединяются данные
+
+
+-- Работники с ЗП больше, чем у их менеджера
+
+SELECT 
+t1.first_name as manager_name,
+t1.salary as manager_salary,
+t2.first_name as employee_name,
+t2.salary as employee_salary
+FROM hr.employees t1
+INNER JOIN hr.employees t2
+on t1.employee_id = t2.manager_id AND t1.salary < t2.salary;
+
