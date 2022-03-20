@@ -1,0 +1,8 @@
+-- 1_Базовый синтаксис
+
+SELECT DISTINCT JOB_ID FROM hr.employees; -- Distinct = Убрать дубликаты JOB_ID
+
+SELECT JOB_ID FROM hr.employees; -- Все JOB_ID
+
+-- найти job_id у которых нет COMMISSION_PCT или зп меньше 3000
+SELECT JOB_ID FROM hr.employees WHERE COMMISSION_PCT is null OR SALARY < 3000;

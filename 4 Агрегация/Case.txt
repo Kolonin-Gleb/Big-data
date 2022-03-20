@@ -1,0 +1,70 @@
+-- Оператор CASE 
+-- CASE используется только в SELECT
+-- С помощью CASE нельзя менять значения в таблице. 
+-- Эта конструкция создает новое поле для вывода в соответствии с описанной логикой.
+
+SELECT 
+	CASE
+		WHEN ORDER_MODE = 'direct'
+        THEN 'Офлайн'
+        ELSE 'Онлайн'
+	END AS rus_order_mode,
+	ORDER_MODE
+from oe.orders
+
+-- END AS ... - имя нового поля вывода
+
+
+-- Оператор CASE 
+-- CASE используется только в SELECT
+-- С помощью CASE нельзя менять значения в таблице. 
+-- Эта конструкция создает новое поле для вывода в соответствии с описанной логикой.
+
+SELECT 
+	CASE
+		WHEN ORDER_MODE = 'direct'
+        THEN 'Офлайн'
+        ELSE 'Онлайн'
+	END AS rus_order_mode,
+	ORDER_MODE
+from oe.orders
+
+-- END AS ... - имя нового поля вывода
+
+
+-- 1) Сформировать поле SALARY_GROUP которое принимает 
+-- значение 1, если зп сотрудника больше 10000 
+-- значение 0, если зп сотрудника меньше 10000 
+
+SELECT * FROM hr.emplooyees;
+
+SELECT
+    CASE
+        WHEN SALARY > 10000
+        THEN '1'
+        ELSE '0'
+    END AS SALARY_GROUP,
+    SALARY
+FROM hr.employees;
+
+-- Посчитать число записей в этих группах
+CREATE TABLE SALARY_GROUPS AS
+SELECT
+    CASE
+        WHEN SALARY > 10000
+        THEN '1'
+        ELSE '0'
+    END AS SALARY_GROUP,
+    SALARY
+FROM hr.employees;
+
+SELECT 
+    SALARY_GROUP,
+    count(*)
+FROM SALARY_GROUPS
+GROUP BY SALARY_GROUP;
+
+
+
+
+

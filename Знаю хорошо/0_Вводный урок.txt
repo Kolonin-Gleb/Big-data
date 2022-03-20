@@ -1,0 +1,13 @@
+__________ Big Data ____________
+Полезные команды с вводного урока:
+
+SELECT * from hr.employees WHERE
+DEPARTMENT_ID not in (60, 30, 100)
+
+SELECT * from hr.employees
+WHERE first_name like 'S%';
+
+SELECT * from hr.employees
+WHERE first_name like '%ll%';
+
+

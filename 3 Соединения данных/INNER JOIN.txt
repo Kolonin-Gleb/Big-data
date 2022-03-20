@@ -2,7 +2,7 @@ SELECT * from hr.employees;
 
 SELECT * FROM hr.departments;
 
-
+-- Создание таблицы, как результата работы Join-а
 CREATE TABLE emp_dep AS
 SELECT 
     emp.FIRST_NAME,
@@ -12,4 +12,6 @@ INNER JOIN hr.departments dep
 ON emp.DEPARTMENT_ID = dep.DEPARTMENT_ID;
 
 SELECT * FROM emp_dep;
+
+
 

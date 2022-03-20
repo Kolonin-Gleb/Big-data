@@ -1,0 +1,67 @@
+-- Where задаёт условия для неагрегируемых полей
+-- Having задаёт условия для агрегируемых полей
+-- HAVING всегда используется вместе с GROUP BY. Без GROUP BY его не используют.
+
+-- Задача с HAVING
+
+SELECT * from oe.customers;
+
+-- Вывод кол. клиентов из всех стран, в которых их больше 10
+select 
+    count(*),
+    NLS_TERRITORY
+from oe.customers
+group by NLS_TERRITORY
+having count(*) > 10
+ORDER BY count(*); 
+-- Сортировка стран по кол. клиентов в них
+-- ORDER BY обязательно указывать после having
+
+-- WHERE и HAVING могут использоваться совместно
+-- В таком случае порядок их указания должен быть следующим
+/*
+select 
+    count(*),
+    NLS_TERRITORY
+from oe.customers
+WHERE 1 = 1
+group by NLS_TERRITORY
+having count(*) > 10
+ORDER BY count(*); 
+*/
+
+-- 1) Вывести названия отделов с кол. сотрудников > 10
+-- Названия отделов в таблице hr.departments
+-- Кол. сотрудников в деп. можно посчитать исп. данные таблицы hr.employees
+
+SELECT * FROM hr.employees;
+
+SELECT
+    count(emp.FIRST_NAME),
+    dep.DEPARTMENT_NAME
+FROM
+hr.employees emp,
+hr.departments dep
+WHERE emp.DEPARTMENT_ID = dep.DEPARTMENT_ID
+group by dep.DEPARTMENT_NAME
+having count(emp.FIRST_NAME) > 10;
+
+-- Названия отделов с кол. сотрудников больше среднего кол. сотрудников по всем отделам
+-- Среднее число сотрудников по всем отделам = сумма сотрудников в каждом отделе / кол. отделов
+
+select
+    dep.DEPARTMENT_NAME as название_департамента,
+    count(emp.FIRST_NAME) as число_сотрудников
+from
+hr.employees emp,
+hr.departments dep
+where emp.DEPARTMENT_ID = dep.DEPARTMENT_ID
+group by dep.DEPARTMENT_NAME
+having count(emp.FIRST_NAME) > (select avg(count(*)) from hr.employees group by department_id);
+
+SELECT * FROM hr.employees;
+
+-- SELECT count(*), department_id from hr.employees group by department_id -- Число сотрудников в каждом департаменте
+-- select avg(count(*)) from hr.employees group by department_id -- Среднее число сотрудников в департаментах
+
+

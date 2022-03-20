@@ -1,0 +1,53 @@
+-- 2 lesson
+
+-- Создание таблицы
+
+CREATE TABLE my_table
+(
+username VARCHAR(100),
+userpassword NUMBER
+)
+
+-- SELECT * FROM my_table; -- Данные из таблицы
+
+-- DESCRIBE my_table; -- Структура таблицы
+
+-- Создание таблицы с ограничениями на поля
+-- Установка некоторым полям свойства primary key
+create table artists
+(
+artist_name VARCHAR2(100) NOT NULL,
+artist_lastname VARCHAR2(100) NOT NULL,
+gender char(1) check (gender in ('f', 'm')),
+primary key (artist_name, artist_lastname)
+);
+
+SELECT * FROM artists;
+DESCRIBE artists;
+
+-- Вставка корректных данных в таблицу
+INSERT INTO artists VALUES ('Gleb', 'Kolonin', 'm');
+-- Вставка некорректных данных в таблицу всё равно произошла!
+INSERT INTO artists VALUES ('Gleb', 'Kolonina', 'f');
+
+
+
+CREATE TABLE ARTIST
+(
+    NAME VARCHAR2(255) NOT NULL,
+    LASTNAME VARCHAR2(255) NOT NULL,
+    gender char(1) check (gender in ('f', 'm')),
+    primary key (NAME, LASTNAME)
+);
+
+-- Ошибка вставки данных при проверки на ограничения
+-- INSERT INTO ARTIST VALUES ('name', 'lastname', 'q');
+
+INSERT INTO ARTIST VALUES ('name2', 'lastname2', 'f');
+
+SELECT * FROM ARTIST;
+
+-- ВЫВОД: Ограничения primary лун плохо работают!
+
+
+

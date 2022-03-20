@@ -1,0 +1,55 @@
+-- Практика по UNION-ам
+
+CREATE TABLE book_orders
+(
+id INT,
+name VARCHAR(60),
+price NUMBER,
+primary key(id)
+)
+
+INSERT INTO book_orders VALUES (1, 'How to improve our world', 400);
+INSERT INTO book_orders VALUES (2, 'How to improve our world', 250);
+DELETE FROM book_orders WHERE id = 2;
+
+CREATE TABLE films_orders
+(
+id INT,
+title VARCHAR(40),
+ticket_price NUMBER,
+primary key(id)
+)
+
+INSERT INTO films_orders VALUES (1, 'How to become a better human', 200);
+INSERT INTO films_orders VALUES (2, 'How to become a better human', 200);
+
+SELECT * FROM book_orders;
+SELECT * FROM films_orders;
+
+-- Соединение 
+-- Название столбцов в результирующей таблице объединения
+-- берется по названиям столбцов 1-ой таблицы
+SELECT name as b_title, price FROM book_orders
+UNION
+SELECT title, ticket_price FROM films_orders;
+-- UNION делает вертикальное объединение таблиц.
+-- Если в таблицах присутствуют дубликаты, то они не попадут в результирующую выборку
+-- Дубликатами считаются записи в таблице у которых совпадает всё, кроме primary key
+
+
+SELECT name as b_title, price FROM book_orders
+UNION ALL
+SELECT title, ticket_price FROM films_orders;
+-- UNION ALL делает вертикальное объединение таблиц.
+-- Дубликаты попадают в рез. выборку
+
+
+
+
+
+
+
+
+
+
+

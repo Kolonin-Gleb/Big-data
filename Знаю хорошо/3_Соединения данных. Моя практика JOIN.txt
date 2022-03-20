@@ -1,0 +1,114 @@
+CREATE TABLE table1
+(
+id INT,
+name VARCHAR(60),
+primary key(id)
+)
+
+INSERT INTO table1 VALUES (1, 'Peter');
+INSERT INTO table1 VALUES (2, 'Gleb');
+INSERT INTO table1 VALUES (3, 'Seva');
+INSERT INTO table1 VALUES (4, 'Katya');
+
+DELETE FROM table1 WHERE id = 2;
+-- Изменение таблицы
+ALTER TABLE table1
+ADD lastname VARCHAR(60);
+-- Добавление данных в изм. таблицу
+UPDATE table1 SET lastname = 'Parker' WHERE id = 1;
+UPDATE table1 SET lastname = 'Kolonin' WHERE id = 2;
+UPDATE table1 SET lastname = 'Loginov' WHERE id = 3;
+UPDATE table1 SET lastname = 'Matyevskaya' WHERE id = 4;
+
+CREATE TABLE table2
+(
+id INT,
+age NUMBER,
+primary key(id)
+)
+
+INSERT INTO table2 VALUES (3, 27);
+INSERT INTO table2 VALUES (4, 27);
+INSERT INTO table2 VALUES (5, 31);
+INSERT INTO table2 VALUES (6, 21);
+
+SELECT * FROM table1;
+SELECT * FROM table2;
+
+-- Практика по JOIN-ам
+
+-- 1) INNER JOIN
+-- INNER Соединяет данные (как пересечение множеств) по заданному условию.
+-- Записи для которых не выполняется условие объединения
+-- не попадают в выборку
+SELECT
+    t1.lastname,
+    t2.age
+FROM table1 t1
+INNER JOIN table2 t2
+ON t1.id = t2.id;
+
+-- 2) LEFT JOIN
+-- LEFT Соединяет данные, беря все данные из таблицы указанной слева от ключевоего слова LEFT.
+-- по заданному условию.
+-- Записи для которых не выполняется условие объединения
+-- попадают в выборку с присоединенным значением null
+
+SELECT
+    t1.lastname,
+    t2.age
+FROM table1 t1
+LEFT JOIN table2 t2
+ON t2.id = t1.id;
+
+-- 3) RIGHT JOIN
+-- RIGHT Соединяет данные, беря все данные из таблицы указанной справа от ключевоего слова RIGHT.
+-- по заданному условию.
+-- Записи для которых не выполняется условие объединения
+-- попадают в выборку с присоединенным значением null
+
+SELECT
+    t1.lastname,
+    t2.age
+FROM table1 t1
+RIGHT JOIN table2 t2
+ON t1.id = t2.id;
+
+-- 4) FULL JOIN
+-- FULL Соединяет данные, беря все данные из обоих таблиц от ключевого слова FULL.
+-- по заданному условию.
+-- Записи для которых не выполняется условие объединения
+-- попадают в выборку с присоединенным значением null
+
+SELECT
+    t1.lastname,
+    t2.age
+FROM table1 t1
+FULL JOIN table2 t2
+ON t1.id = t2.id;
+
+-- 5) CROSS JOIN
+-- CROSS Соединяет данные, попарно (для каждой записи из 1 таблицы, все записи из второй)
+-- Не имеет условия объединения
+
+SELECT
+    t1.lastname,
+    t2.age
+FROM table1 t1
+CROSS JOIN table2 t2;
+
+-- 6) SELF JOIN
+-- Ключевого слова SELF не существует.
+-- Так называют JOIN, который соединяет данные таблицы с данными этой же таблицы.
+-- 
+
+SELECT * FROM hr.employees;
+-- || - объединяет столбцы в один при выводе
+SELECT emp1.FIRST_NAME || ' works for ' || emp2.FIRST_NAME
+FROM hr.employees emp1, hr.employees emp2
+WHERE emp1.manager_id = emp2.employee_id
+ORDER BY emp1.FIRST_NAME;
+
+-- ВАЖНО:
+-- При работе SELECT столбцы выводятся в том порядке, в котором их запращивают!
+
