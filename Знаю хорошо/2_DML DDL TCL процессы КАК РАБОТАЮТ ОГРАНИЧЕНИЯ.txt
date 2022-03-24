@@ -16,14 +16,26 @@ userpassword NUMBER
 -- Установка некоторым полям свойства primary key
 create table artists
 (
-artist_name VARCHAR2(100) NOT NULL,
-artist_lastname VARCHAR2(100) NOT NULL,
+artist_name VARCHAR2(100) UNIQUE,
+artist_lastname VARCHAR2(100) UNIQUE,
 gender char(1) check (gender in ('f', 'm')),
 primary key (artist_name, artist_lastname)
 );
+-- В рамках одной таблицы не может быть 2х полей с primary key
+-- Это правило действует для всех диалектов SQL
+
+-- Если нужно сделать 2 поля уникальными в рамках 1 таблицы, то
+-- нужно использовать UNIQUE.
+-- primary key это UNIQUE + NOT NULL
+
+-- Задавая ограничение вида 
+-- primary key (artist_name, artist_lastname)
+-- гарантируется, что в таблице не будет записей у которых будут совпадать и имя и фамилия
+-- но могут содержаться одинаковые имена с разными фамилиями или наоборот.
 
 SELECT * FROM artists;
 DESCRIBE artists;
+DROP TABLE artists;
 
 -- Вставка корректных данных в таблицу
 INSERT INTO artists VALUES ('Gleb', 'Kolonin', 'm');
@@ -46,8 +58,4 @@ CREATE TABLE ARTIST
 INSERT INTO ARTIST VALUES ('name2', 'lastname2', 'f');
 
 SELECT * FROM ARTIST;
-
--- ВЫВОД: Ограничения primary лун плохо работают!
-
-
 

@@ -1,0 +1,74 @@
+/*
+3)Таблицы OE.CUSTOMERS OE.ORDERS HR.EMPLOYEES
+-- Нужно исп. 3 таблицы
+
+Выведите имена покупателей и продавцов, 
+-- OE.CUSTOMERS.CUST_FIRST_NAME - имя покупателя
+-- HR.EMPLOYEES.FIRST_NAME - имя продовца
+
+которые сделали заказ, ||| Это условие для выборки выше
+-- OE.ORDERS.CUSTOMER_ID - ID заказчика и OE.ORDERS.SALES_REP_ID - ID продавца (они осущствляют заказ)
+
+где у одного продавца сделал заказ минимум дважды один покупатель ||||||||| По другому нужно также вывести число заказов, что произошло между покупателем и продавцом
+-- Нужно COUNT(*) для подсчёта числа заказов
+-- Нужно GROUP BY чтобы считать для каждого покупателя отдельно
+-- Нужно HAVING чтобы выводить инфу, только если заказов >= 2
+-- 
+*/
+
+
+-- cus.CUSTOMER_ID = ord.CUSTOMER_ID AND emp.EMPLOYEE_ID = ord.SALES_REP_ID -- Обнаружение заказа между выводимым покупателем и продавцом
+
+SELECT * FROM OE.CUSTOMERS; -- Покупатели (CUST_FIRST_NAME - имя)
+SELECT * FROM HR.EMPLOYEES; -- Продавцы (FIRST_NAME - имя)
+SELECT * FROM OE.ORDERS; -- Заказы (ORDER_ID) SALES_REP_ID = HR.EMPLOYEES.EMPLOYEE_ID - это и есть инфа о продовцах
+
+-- Число сделок с участием каждого клиента и продавца
+-- Т.к. у части заказов нет продавца они в выборку не попадают, т.к. >= 2 сделки с никем сделать нельзя
+
+-- Запрос на кол. сделок между всеми покупателями и всеми продавцами При условии, что известен продавец и сделок было >= 2
+SELECT
+    ord.CUSTOMER_ID as id_клиента,
+    ord.SALES_REP_ID as id_продавца,
+    count(ord.ORDER_ID) as число_сделок
+FROM OE.ORDERS ord
+WHERE ord.SALES_REP_ID is not null
+GROUP BY ord.CUSTOMER_ID, ord.SALES_REP_ID
+HAVING count(ord.ORDER_ID) >= 2
+
+
+-- Верный вывод с подключением доп. таблиц
+SELECT
+    cus.CUSTOMER_ID as id_клиента,
+    ord.SALES_REP_ID as id_продавца,
+    count(ord.ORDER_ID) as число_сделок
+FROM OE.ORDERS ord, OE.CUSTOMERS cus, HR.EMPLOYEES emp
+WHERE ord.SALES_REP_ID is not null AND ord.CUSTOMER_ID = cus.CUSTOMER_ID AND ord.SALES_REP_ID = emp.EMPLOYEE_ID
+GROUP BY ord.CUSTOMER_ID, ord.SALES_REP_ID
+HAVING count(ord.ORDER_ID) >= 2
+
+-- Вывод с именами. с использованием всех таблиц.
+-- Группировка позволяет сформировать правильную выборку
+SELECT
+    cus.CUST_FIRST_NAME as имя_клиента,
+    emp.FIRST_NAME as имя_продавца,
+    count(ord.ORDER_ID) as число_сделок
+FROM OE.ORDERS ord, OE.CUSTOMERS cus, HR.EMPLOYEES emp
+WHERE ord.SALES_REP_ID is not null AND ord.CUSTOMER_ID = cus.CUSTOMER_ID AND ord.SALES_REP_ID = emp.EMPLOYEE_ID
+GROUP BY cus.CUST_FIRST_NAME, emp.FIRST_NAME, ord.CUSTOMER_ID, ord.SALES_REP_ID
+HAVING count(ord.ORDER_ID) >= 2
+ORDER BY emp.FIRST_NAME
+
+-- Без доп. информации о числе сделок
+SELECT
+    cus.CUST_FIRST_NAME as имя_клиента,
+    emp.FIRST_NAME as имя_продавца
+FROM OE.ORDERS ord, OE.CUSTOMERS cus, HR.EMPLOYEES emp
+WHERE ord.SALES_REP_ID is not null AND ord.CUSTOMER_ID = cus.CUSTOMER_ID AND ord.SALES_REP_ID = emp.EMPLOYEE_ID
+GROUP BY cus.CUST_FIRST_NAME, emp.FIRST_NAME, ord.CUSTOMER_ID, ord.SALES_REP_ID
+HAVING count(ord.ORDER_ID) >= 2
+ORDER BY emp.FIRST_NAME
+
+
+
+

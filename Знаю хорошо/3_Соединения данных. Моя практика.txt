@@ -1,9 +1,9 @@
 CREATE TABLE book_orders
 (
-id INT,
-name VARCHAR(60),
-price NUMBER,
-primary key(id)
+    id INT,
+    name VARCHAR(60),
+    price NUMBER,
+    primary key(id)
 )
 
 INSERT INTO book_orders VALUES (1, 'How to improve our world', 400);
@@ -12,10 +12,10 @@ DELETE FROM book_orders WHERE id = 2;
 
 CREATE TABLE films_orders
 (
-id INT,
-title VARCHAR(40),
-ticket_price NUMBER,
-primary key(id)
+    id INT,
+    title VARCHAR(40),
+    ticket_price NUMBER,
+    primary key(id)
 )
 
 INSERT INTO films_orders VALUES (1, 'How to become a better human', 200);
@@ -32,31 +32,11 @@ SELECT * FROM films_orders;
 -- При совершении объединения нужно чётко указывать,
 -- какие данные из таблиц должны попасть в объединение.
 
--- ПОЧЕМУ-ТО не работает!
--- SELECT
---     f_orders.title,
---     f_orders.ticket_price,
---     b_orders.name,
---     b_orders.price
--- FROM films_orders as f_orders
--- INNER JOIN book_orders as b_orders
--- ON f_orders.id = b_orders.id;
-
-
--- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT
+    f_orders.title,
+    f_orders.ticket_price,
+    b_orders.name,
+    b_orders.price
+FROM films_orders f_orders
+INNER JOIN book_orders b_orders
+ON f_orders.id = b_orders.id;
