@@ -1,0 +1,29 @@
+SELECT * FROM hr.employees;
+
+-- Последние 4 цифры номеров телефонов
+SELECT 
+SUBSTR(PHONE_NUMBER, -4)
+FROM hr.employees;
+
+-- Убрать . в телефонах
+
+SELECT 
+REPLACE(PHONE_NUMBER, '.')
+FROM hr.employees;
+
+-- Работники с самым длинным Email
+
+SELECT EMAIL
+FROM hr.employees
+WHERE LENGTH(EMAIL) = (SELECT MAX(LENGTH(EMAIL)) FROM hr.employees);
+
+
+
+
+-- Поле с именем и фамилией сотрудника
+
+SELECT
+CONCAT(FIRST_NAME, CONCAT(' ', LAST_NAME))
+FROM hr.employees;
+
+
