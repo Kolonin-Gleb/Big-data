@@ -1,0 +1,17 @@
+Если сформировать доп. таблицу new_dataSource, как результат предыдущих очисток можно легко 
+добавить дополнительную очистку телефона на приведение к единому формату.
+
+|| - оператор конкатенации
+
+
+select
+    NEW_EMAIL,
+    case 
+        when NEW_PHONE like '8%'
+        then '+7' || substr(NEW_PHONE,2)
+        ELSE NEW_PHONE
+    end as NEW_PHONE,
+    EMAIL
+from new_dataSource
+
+
