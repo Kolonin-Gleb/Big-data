@@ -1,0 +1,30 @@
+-- Таблица OE. PRODUCT_INFORMATION.
+-- Задача: вывести максимальное число заказов,
+-- Просто посчитать число заказов, где есть габариты
+
+-- которое содержит в описании габариты (размеры)
+-- PRODUCT_DESCRIPTION
+-- габариты указываются как 3 числа разделенные x
+
+-- Какой запрос я могу придумать, чтобы выцепить эту информацию?
+-- Используй regex - чтобы составить хорошую регулярку
+-- Нужно брать все PRODUCT_DESCRIPTION, где имеется 
+
+
+SELECT PRODUCT_DESCRIPTION
+FROM OE.PRODUCT_INFORMATION
+WHERE regexp_like(PRODUCT_DESCRIPTION, '\s[x]\s.+[x]\s');
+
+-- Как результат я должен вывести число заказов с габаритами в описании
+
+-- Предложения учителя
+-- Вместе регулярки можно указать конкретное слово, что следует искать
+
+SELECT PRODUCT_DESCRIPTION
+FROM OE.PRODUCT_INFORMATION
+WHERE regexp_like(PRODUCT_DESCRIPTION, 'Dimensions');
+
+-- Число (с возможной дробной частью до x)
+SELECT PRODUCT_DESCRIPTION
+FROM OE.PRODUCT_INFORMATION
+WHERE regexp_like(PRODUCT_DESCRIPTION, '\d*[.]*\d [x]');

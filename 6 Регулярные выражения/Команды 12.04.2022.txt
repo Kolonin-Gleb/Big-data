@@ -1,0 +1,51 @@
+/*
+Таблица hr.employees
+1) Найдите пользователей, у которых в имени есть одна из букв (a,f,r,t)
+2) Найдите пользователей, у которых имя начинается с одной из букв (a,f,r,t)
+*/
+
+SELECT * FROM hr.employees;
+
+-- 1)
+SELECT FIRST_NAME
+FROM hr.employees
+WHERE regexp_like(FIRST_NAME, '[afrt]');
+
+-- 2)
+SELECT FIRST_NAME
+FROM hr.employees
+WHERE regexp_like(FIRST_NAME, '^[afrt]');
+
+
+-- ЕЩЁ задания:
+
+
+SELECT * FROM hr.employees;
+
+SELECT PHONE_NUMBER
+FROM hr.employees
+WHERE regexp_like(PHONE_NUMBER, '[\d{3}.\d{3}.\d{4}]');
+-- 107
+
+
+/*
+2) Таблица hr.departments. Выведите только те записи, у которых название
+департамента состоит не более, чем из 2 слов
+
+Т.е. 1 и 2 слова в названии - ОК
+*/
+
+SELECT * FROM hr.departments;
+
+/*
+Любое число символов + пробел + Любое число символов + пробел
+*/
+
+
+SELECT DEPARTMENT_NAME
+FROM hr.departments
+WHERE regexp_like(DEPARTMENT_NAME, '[\w+\s*\w*]');
+
+
+
+
