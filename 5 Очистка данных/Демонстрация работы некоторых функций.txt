@@ -1,0 +1,22 @@
+SELECT
+    upper('ПрИвЕт'),
+    lower('ПрИвЕт'),
+    initcap('ПрИвЕт')
+FROM dual;
+
+-- initcap - Первая буква в верзний регистр, остальные в нижний
+
+-- Добавление символов до момента, когда длина станет указанной
+SELECT
+    lpad('ABC', 5, '*'),
+    rpad('ABC', 5, '*')
+FROM dual;
+
+
+-- Уничтожение пробелов
+SELECT
+    ltrim('   A B C   '),
+    rtrim('   A B C   '),
+     trim('   A B C   '),
+     replace('   A B C   ', ' ')
+FROM dual;
