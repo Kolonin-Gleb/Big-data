@@ -1,0 +1,35 @@
+-- Создание основной таблицы
+
+--CREATE TABLE 
+--cars AS SELECT FIELD1 as id,
+--SUBSTR(engine, 1, INSTR(engine, '/')-2) as engine_capacity,
+--SUBSTR(engine, INSTR(engine, '/')+2, INSTR(engine, '/')-2) as engine_power,
+
+-- Определение верного id для fuel_type
+SELECT 
+    CASE
+        WHEN SUBSTR(engine, REGEXP_INSTR(engine, '\s+(\S+)$')) = ' Бензин'
+        THEN 1
+    END AS fuel_type
+FROM source_data
+
+--SUBSTR(PRICE, 1, LENGTH(PRICE)-2) as price,
+--gearbox_type.id as gearbox_id
+
+
+SELECT gearbox_type.id as gearbox_id FROM gearbox_type;
+
+-- Получение цены
+-- Проблема в том, что тип цены - VARCHAR
+--CREATE TABLE testPrice AS SELECT SUBSTR(PRICE, 1, LENGTH(PRICE)-2) as price FROM source_data;
+--DESCRIBE testPrice;
+--DROP TABLE testPrice;
+--ALTER TABLE testPrice
+--  MODIFY price number not null;
+
+
+-- engine_capacity
+--SELECT SUBSTR(ДВИГАТЕЛЬ, 1, INSTR(ДВИГАТЕЛЬ, '/')-2) as engine_capacity FROM source_data;
+
+-- engine_power
+--SELECT SUBSTR(ДВИГАТЕЛЬ, INSTR(ДВИГАТЕЛЬ, '/')+2, INSTR(ДВИГАТЕЛЬ, '/')-2) as engine_power FROM source_data;

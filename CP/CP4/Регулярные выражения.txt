@@ -1,0 +1,15 @@
+Для получения послегднего слова в строке (fuel_type)
+\s+(\S+)$
+
+CREATE TABLE fuel_type AS SELECT SUBSTR(ДВИГАТЕЛЬ, REGEXP_INSTR(ДВИГАТЕЛЬ, '\s+(\S+)$')) as name, row_number() over(order by ДВИГАТЕЛЬ) as id FROM source_data;
+SELECT * FROM fuel_type;
+
+
+
+-- engine_capacity
+SELECT SUBSTR(ДВИГАТЕЛЬ, 1, INSTR(ДВИГАТЕЛЬ, '/')-2) as engine_capacity FROM source_data;
+
+-- engine_power
+SELECT SUBSTR(ДВИГАТЕЛЬ, INSTR(ДВИГАТЕЛЬ, '/')+2, INSTR(ДВИГАТЕЛЬ, '/')-2) as engine_power FROM source_data;
+
+
