@@ -92,7 +92,6 @@ select * from source_data;
 -- Создание вспомогательных таблиц
 
 -- Таблица fuel_type
--- Т.к. Тип топлива хранится в поле Двигатель с другими данными нужны рег. выражения
 CREATE TABLE fuel_type AS
 SELECT
 row_number() over(order by name) as id,
@@ -100,8 +99,7 @@ name from (select distinct SUBSTR(engine, REGEXP_INSTR(engine, '\s+(\S+)$')) nam
 SELECT * FROM fuel_type;
 
 
--- Таблица Gearbox_type
--- Нужно переделать!
+-- Таблица gearbox_type
 CREATE TABLE gearbox_type AS
 SELECT
 row_number() over(order by name) as id,
@@ -151,36 +149,134 @@ SELECT * FROM colors;
 
 -- Создание основной таблицы
 
---CREATE TABLE 
---cars AS SELECT FIELD1 as id,
---SUBSTR(engine, 1, INSTR(engine, '/')-2) as engine_capacity,
---SUBSTR(engine, INSTR(engine, '/')+2, INSTR(engine, '/')-2) as engine_power,
+CREATE TABLE cars
+AS SELECT
+FIELD1 + 1 as id,
+SUBSTR(engine, 1, INSTR(engine, '/')-2) as engine_capacity,
+SUBSTR(engine, INSTR(engine, '/')+2, INSTR(engine, '/')-2) as engine_power,
+CASE
+    WHEN SUBSTR(engine, REGEXP_INSTR(engine, '\s+(\S+)$')) = ' Бензин'
+    THEN 1
+END AS fuel_type,
+to_number(replace(substr(price, 0, length(price)-2), ' ', '')) as price,
+CASE
+    WHEN transmission = 'автоматическая'
+    THEN 1
+    WHEN transmission = 'вариатор'
+    THEN 2
+    WHEN transmission = 'механическая'
+    THEN 3
+    WHEN transmission = 'роботизированная'
+    THEN 4
+END AS gearbox_id,
+CASE
+    WHEN body = 'внедорожник 5 дв.'
+    THEN 1
+    WHEN body = 'компактвэн'
+    THEN 2
+    WHEN body = 'минивэн'
+    THEN 3
+    WHEN body = 'седан'
+    THEN 4
+    WHEN body = 'универсал 5 дв.'
+    THEN 5
+    WHEN body = 'хэтчбек 5 дв.'
+    THEN 6
+END AS body_id,
+CASE
+    WHEN drive = 'передний'
+    THEN 1
+    WHEN drive = 'полный'
+    THEN 2
+END AS drive_id,
+to_number(replace(SUBSTR(mileage, 0, LENGTH(mileage)-3), ' ', '')) as mileage,
+CASE
+    WHEN wheel = 'Левый'
+    THEN 1
+    WHEN wheel = 'Правый'
+    THEN 2
+END AS wheel_id,
+CASE
+    WHEN state = 'Не требует ремонта'
+    THEN 1
+END AS car_state_id,
+CASE
+    WHEN custom = 'Растаможен'
+    THEN 1
+END AS custom_id,
+CASE
+    WHEN color = 'бежевый'
+    THEN 1
+    WHEN color = 'белый'
+    THEN 2
+    WHEN color = 'голубой'
+    THEN 3
+    WHEN color = 'зелёный'
+    THEN 4
+    WHEN color = 'золотистый'
+    THEN 5
+    WHEN color = 'коричневый'
+    THEN 6
+    WHEN color = 'красный'
+    THEN 7
+    WHEN color = 'серебристый'
+    THEN 8
+    WHEN color = 'серый'
+    THEN 9
+    WHEN color = 'синий'
+    THEN 10
+    WHEN color = 'фиолетовый'
+    THEN 11
+    WHEN color = 'чёрный'
+    THEN 12
+END AS color_id,
+year
+FROM source_data;
 
--- Определение верного fuel_type_id
---SELECT 
---    CASE
---        WHEN SUBSTR(engine, REGEXP_INSTR(engine, '\s+(\S+)$')) = ' Бензин'
---        THEN 1
---    END AS fuel_type
---FROM source_data
+--SELECT * FROM cars;
+--DESCRIBE cars;
+--SELECT * FROM source_data;
 
---SUBSTR(PRICE, 1, LENGTH(PRICE)-2) as price,
--- Определение верного gearbox_id
+-- Представление подсчёта автомобилей проданных в каждый год
+CREATE VIEW sales_per_year AS SELECT
+    count(*) as saled,
+    year
+from cars
+group by year;
 
--- TODO: Тут Остановился. Нужно придумать, как я сформирую такую сложную таблицу.
-SELECT gearbox_type.id as gearbox_id FROM gearbox_type;
+SELECT * FROM sales_per_year;
 
--- Получение цены
--- Проблема в том, что тип цены - VARCHAR
---CREATE TABLE testPrice AS SELECT SUBSTR(PRICE, 1, LENGTH(PRICE)-2) as price FROM source_data;
---DESCRIBE testPrice;
---DROP TABLE testPrice;
---ALTER TABLE testPrice
---  MODIFY price number not null;
+-- Пресдтавление подсчёта кол-во машин дороже средней цены и дешевле средней цены
+CREATE VIEW more_expensive_than_avg AS SELECT
+COUNT(*) as quntity
+FROM cars
+where price > (SELECT AVG(price) FROM cars);
+
+CREATE VIEW less_expensive_than_avg AS SELECT
+COUNT(*) as quntity
+FROM cars
+where price < (SELECT AVG(price) FROM cars);
+
+SELECT * FROM more_expensive_than_avg;
+SELECT * FROM less_expensive_than_avg;
+
+-- Итоговый вариант
+CREATE VIEW sales_analyz AS SELECT
+(SELECT * FROM more_expensive_than_avg) as more_expensive_than_avg,
+(SELECT * FROM less_expensive_than_avg) as less_expensive_than_avg
+FROM more_expensive_than_avg, less_expensive_than_avg;
+
+SELECT * FROM sales_analyz;
+
+-- Представление рассчёта разницы расстоможенных и не расстоможенных машин
+-- В таблице нет нерастоможенных машин, поэтому ОТВЕТ - СТОИМОСТЬ ВСЕХ РАССТОМОЖННЫХ МАШИН
+
+CREATE VIEW customs_difference AS SELECT
+(SELECT SUM(price) FROM cars WHERE custom_id = 1) as "Стоимость расстоможенных машин",
+(SELECT SUM(price) FROM cars WHERE custom_id != 1) as "Стоимость нерасстоможенных машин",
+(SELECT SUM(price) FROM cars WHERE custom_id = 1) - (SELECT SUM(price) FROM cars WHERE custom_id != 1) as "Разница расстоможенных и не расстоможенных машин"
+FROM cars;
+
+SELECT * FROM customs_difference;
 
 
--- engine_capacity
---SELECT SUBSTR(ДВИГАТЕЛЬ, 1, INSTR(ДВИГАТЕЛЬ, '/')-2) as engine_capacity FROM source_data;
-
--- engine_power
---SELECT SUBSTR(ДВИГАТЕЛЬ, INSTR(ДВИГАТЕЛЬ, '/')+2, INSTR(ДВИГАТЕЛЬ, '/')-2) as engine_power FROM source_data;

@@ -1,0 +1,88 @@
+
+CREATE TABLE cars
+AS SELECT
+FIELD1 + 1 as id,
+SUBSTR(engine, 1, INSTR(engine, '/')-2) as engine_capacity,
+SUBSTR(engine, INSTR(engine, '/')+2, INSTR(engine, '/')-2) as engine_power,
+CASE
+    WHEN SUBSTR(engine, REGEXP_INSTR(engine, '\s+(\S+)$')) = ' Бензин'
+    THEN 1
+END AS fuel_type,
+to_number(replace(substr(price, 0, length(price)-2), ' ', '')) as price,
+CASE
+    WHEN transmission = 'автоматическая'
+    THEN 1
+    WHEN transmission = 'вариатор'
+    THEN 2
+    WHEN transmission = 'механическая'
+    THEN 3
+    WHEN transmission = 'роботизированная'
+    THEN 4
+END AS gearbox_id,
+CASE
+    WHEN body = 'внедорожник 5 дв.'
+    THEN 1
+    WHEN body = 'компактвэн'
+    THEN 2
+    WHEN body = 'минивэн'
+    THEN 3
+    WHEN body = 'седан'
+    THEN 4
+    WHEN body = 'универсал 5 дв.'
+    THEN 5
+    WHEN body = 'хэтчбек 5 дв.'
+    THEN 6
+END AS body_id,
+CASE
+    WHEN drive = 'передний'
+    THEN 1
+    WHEN drive = 'полный'
+    THEN 2
+END AS drive_id,
+to_number(replace(SUBSTR(mileage, 0, LENGTH(mileage)-3), ' ', '')) as mileage,
+CASE
+    WHEN wheel = 'Левый'
+    THEN 1
+    WHEN wheel = 'Правый'
+    THEN 2
+END AS wheel_id,
+CASE
+    WHEN state = 'Не требует ремонта'
+    THEN 1
+END AS car_state_id,
+CASE
+    WHEN custom = 'Растаможен'
+    THEN 1
+END AS custom_id,
+CASE
+    WHEN color = 'бежевый'
+    THEN 1
+    WHEN color = 'белый'
+    THEN 2
+    WHEN color = 'голубой'
+    THEN 3
+    WHEN color = 'зелёный'
+    THEN 4
+    WHEN color = 'золотистый'
+    THEN 5
+    WHEN color = 'коричневый'
+    THEN 6
+    WHEN color = 'красный'
+    THEN 7
+    WHEN color = 'серебристый'
+    THEN 8
+    WHEN color = 'серый'
+    THEN 9
+    WHEN color = 'синий'
+    THEN 10
+    WHEN color = 'фиолетовый'
+    THEN 11
+    WHEN color = 'чёрный'
+    THEN 12
+END AS color_id,
+year
+FROM source_data;
+
+--SELECT * FROM cars;
+--DESCRIBE cars;
+--SELECT * FROM source_data;

@@ -5,31 +5,118 @@
 --SUBSTR(engine, 1, INSTR(engine, '/')-2) as engine_capacity,
 --SUBSTR(engine, INSTR(engine, '/')+2, INSTR(engine, '/')-2) as engine_power,
 
--- Определение верного id для fuel_type
+-- Определение верного fuel_type_id
+--(SELECT 
+--    CASE
+--        WHEN SUBSTR(engine, REGEXP_INSTR(engine, '\s+(\S+)$')) = ' Бензин'
+--        THEN 1
+--    END AS fuel_type
+--FROM source_data),
+
+-- Формирование price
+--SUBSTR(PRICE, 1, LENGTH(PRICE)-2) as price,
+
+-- Определение верного gearbox_id
+--(SELECT 
+--    CASE
+--        WHEN transmission = 'автоматическая'
+--        THEN 1
+--        WHEN transmission = 'вариатор'
+--        THEN 2
+--        WHEN transmission = 'механическая'
+--        THEN 3
+--        WHEN transmission = 'роботизированная'
+--        THEN 4
+--    END AS gearbox_id
+--FROM source_data),
+
+
+-- Определение верного body_id
+--SELECT 
+--    CASE
+--        WHEN body = 'внедорожник 5 дв.'
+--        THEN 1
+--        WHEN body = 'компактвэн'
+--        THEN 2
+--        WHEN body = 'минивэн'
+--        THEN 3
+--        WHEN body = 'седан'
+--        THEN 4
+--        WHEN body = 'универсал 5 дв.'
+--        THEN 5
+--        WHEN body = 'хэтчбек 5 дв.'
+--        THEN 6
+--    END AS body_id
+--FROM source_data
+
+-- Определение верного drive_id
+--SELECT 
+--    CASE
+--        WHEN drive = 'передний'
+--        THEN 1
+--        WHEN drive = 'полный'
+--        THEN 2
+--    END AS drive_id
+--FROM source_data
+
+-- Формирование mileage
+-- SUBSTR(mileage, 1, LENGTH(mileage)-3) as mileage,
+
+-- Формирование wheel_id
+--SELECT 
+--    CASE
+--        WHEN wheel = 'Левый'
+--        THEN 1
+--        WHEN wheel = 'Правый'
+--        THEN 2
+--    END AS wheel_id
+--FROM source_data
+
+-- Формирование car_state_id
 SELECT 
     CASE
-        WHEN SUBSTR(engine, REGEXP_INSTR(engine, '\s+(\S+)$')) = ' Бензин'
+        WHEN state = 'Не требует ремонта'
         THEN 1
-    END AS fuel_type
+    END AS car_state_id
 FROM source_data
 
---SUBSTR(PRICE, 1, LENGTH(PRICE)-2) as price,
---gearbox_type.id as gearbox_id
+SELECT * FROM source_data;
+-- Формирование customs
+SELECT 
+    CASE
+        WHEN custom = 'Растаможен'
+        THEN 1
+    END AS custom_id
+FROM source_data
 
+-- формирование color_id
+--SELECT 
+--    CASE
+--        WHEN color = 'бежевый'
+--        THEN 1
+--        WHEN color = 'белый'
+--        THEN 2
+--        WHEN color = 'голубой'
+--        THEN 3
+--        WHEN color = 'зелёный'
+--        THEN 4
+--        WHEN color = 'золотистый'
+--        THEN 5
+--        WHEN color = 'коричневый'
+--        THEN 6
+--        WHEN color = 'красный'
+--        THEN 7
+--        WHEN color = 'серебристый'
+--        THEN 8
+--        WHEN color = 'серый'
+--        THEN 9
+--        WHEN color = 'синий'
+--        THEN 10
+--        WHEN color = 'фиолетовый'
+--        THEN 11
+--        WHEN color = 'чёрный'
+--        THEN 12
+--    END AS color_id
+--FROM source_data
 
-SELECT gearbox_type.id as gearbox_id FROM gearbox_type;
-
--- Получение цены
--- Проблема в том, что тип цены - VARCHAR
---CREATE TABLE testPrice AS SELECT SUBSTR(PRICE, 1, LENGTH(PRICE)-2) as price FROM source_data;
---DESCRIBE testPrice;
---DROP TABLE testPrice;
---ALTER TABLE testPrice
---  MODIFY price number not null;
-
-
--- engine_capacity
---SELECT SUBSTR(ДВИГАТЕЛЬ, 1, INSTR(ДВИГАТЕЛЬ, '/')-2) as engine_capacity FROM source_data;
-
--- engine_power
---SELECT SUBSTR(ДВИГАТЕЛЬ, INSTR(ДВИГАТЕЛЬ, '/')+2, INSTR(ДВИГАТЕЛЬ, '/')-2) as engine_power FROM source_data;
+year
