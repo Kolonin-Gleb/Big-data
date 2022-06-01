@@ -1,0 +1,24 @@
+[10:50 AM] Мовсисян Тигран Варужанович
+У нас есть таблица проводок по счетам и мы хотим получить баланс после совершения каждой проводки.
+
+
+create table tBalance( 
+    id number, 
+    account varchar2(20), 
+    value number 
+);
+insert into tBalance values (1,'01',100); 
+insert into tBalance values (2,'01',200); 
+insert into tBalance values (3,'01',-100); 
+insert into tBalance values (4,'01',200); 
+insert into tBalance values (5,'01',100); 
+insert into tBalance values (6,'01',-100); 
+insert into tBalance values (7,'01',100); 
+insert into tBalance values (8, '02',10); 
+insert into tBalance values (9, '02',20); 
+insert into tBalance values (10,'02',-10); 
+insert into tBalance values (11,'02',-20); 
+insert into tBalance values (12,'02',10); 
+insert into tBalance values (13,'02',-10); 
+insert into tBalance values (14,'02',10);
+

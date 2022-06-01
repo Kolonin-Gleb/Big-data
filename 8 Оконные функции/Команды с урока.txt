@@ -1,0 +1,77 @@
+-- Формирование delta между МАКС ЗП в департаменте и ЗП каждого сотрудника.
+
+SELECT * FROM hr.employees;
+
+-- Без оконной функции
+
+SELECT
+    t1.first_name,
+    t1.last_name,
+    t1.salary,
+    t2.max_salary - t1.salary as delta
+FROM hr.employees t1
+INNER JOIN (
+    SELECT
+        department_id,
+        MAX(salary) as max_salary
+    FROM HR.employees
+    GROUP BY department_id
+) t2
+ON t1.department_id = t2.department_id;
+
+-- С оконной функцией
+-- ок. функция идёт после OVER
+
+SELECT
+    first_name,
+    last_name,
+    max(salary) over(PARTITION by department_id) - salary as delta
+FROM HR.employees
+
+/*
+Используя оконные функции можно выводить агрегационные значения с обычными значениями
+(не нужно использовать GROUP BY. Вместо него пишут PARTITION BY)
+
+*/
+
+-- Даст 12 строк
+SELECT
+    department_id,
+    MAX(salary) as max_salary
+FROM HR.employees
+GROUP BY department_id
+
+-- Даст 50 строк. Также как и у источника данных
+-- Строки не дублируются. Инфа выводится для каждого сотрудника
+-- Можно добавить DISTINCT для избавления от дублей
+SELECT
+    department_id,
+    last_name,
+    max(salary) over(PARTITION by department_id) - salary as delta
+FROM HR.employees
+
+
+-- НУЖНО РАЗОБРАТЬСЯ, КАК УВЕЛИЧИТЬ ЧИСЛО ВЫВОДИМЫХ СТРОК в ORACLE SQL!
+-- У меня не выходят все строки.
+
+
+-- Order BY с оконными функциями
+
+select 
+    CUSTOMER_ID, 
+    ORDER_DATE, 
+    sum(ORDER_TOTAL) over(partition by CUSTOMER_ID order by ORDER_DATE) as sum_orders 
+from oe.orders;
+
+-- Он не только сортирует, но и меняет то, как ведутся расчёты.
+-- Теперь сумма расчитывается на момент совершения заказа.
+-- Т.е. сколько он денег потратил на момент завершения покупки номер _такой-то_
+
+-- Order by говорит, о том, что рассчёты нужно вести не по всем с агрегированным полям, а по тому полю, что указано в нём
+
+
+
+
+
+
+
