@@ -101,5 +101,58 @@ LEFT JOIN orders as ord
 ON ord.productid = pr.id
 GROUP BY pr.id, pr.productname, pr.company;
 
+-- Join позволяет объединить данные ГОРИЗОНТАЛЬНО, 
+-- используя условие соединения
 
+-- Объединение множеств - UNION
+-- UNION - позволяет объединить два однотипных набора в один ВЕРТИКАЛЬНО.
+-- Для UNION соединения типы данных должны быть совместимы
+
+
+-- Создание данных для повторения
+
+CREATE TABLE Bank_Customers
+(
+    Id SERIAL PRIMARY KEY,
+    FirstName VARCHAR(20) NOT NULL,
+    LastName VARCHAR(20) NOT NULL,
+    AccountSum NUMERIC DEFAULT 0
+);
+CREATE TABLE Employees
+(
+    Id SERIAL PRIMARY KEY,
+    FirstName VARCHAR(20) NOT NULL,
+    LastName VARCHAR(20) NOT NULL
+);
+  
+INSERT INTO Bank_Customers(FirstName, LastName, AccountSum) VALUES
+('Tom', 'Smith', 2000),
+('Sam', 'Brown', 3000),
+('Paul', 'Ins', 4200),
+('Victor', 'Baya', 2800),
+('Mark', 'Adams', 2500),
+('Tim', 'Cook', 2800);
+
+INSERT INTO Employees(FirstName, LastName) VALUES
+('Homer', 'Simpson'),
+('Tom', 'Smith'),
+('Mark', 'Adams'),
+('Nick', 'Svensson');
+
+-- Выборка всех клиентов и сотрудников банка
+-- Без ALL при наличии совпадения FirstName и LastName в клиентах и сотрудниках
+-- данные будут выведены 1 раз
+SELECT FirstName, LastName
+FROM Bank_Customers
+UNION ALL SELECT firstname, lastname FROM Employees;
+
+
+-- Объединять выборки можно и из 1 таблицы.
+-- Выдавая данные в зависимости от определенных условией.
+-- Пример: В зависимости от суммы на счёте начислять определенные %
+
+SELECT FirstName, LastName, AccountSum + AccountSum * 0.1 AS TotalSum
+FROM Bank_Customers WHERE AccountSum < 3000
+UNION SELECT FirstName, LastName, AccountSum + AccountSum * 0.3 AS TotalSum
+FROM Bank_Customers WHERE AccountSum >= 3000;
 

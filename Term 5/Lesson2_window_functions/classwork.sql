@@ -85,7 +85,24 @@ FROM employees;
 -- 3) добавить условие WHERE
 
 
-SELECT COUNT(*) FROM employees ORDER BY department_id;
+SELECT
+    t2.department_id
+from (
+    select
+        t1.department_id,
+        dense_rank() over(order by t1.cnt desc) as rank,
+        t1.cnt
+    from (
+        SELECT
+            count(*) as cnt,
+            department_id
+        from employees
+        group by department_id
+        ) as t1
+    ) as t2
+where t2.rank = 3
+
+
 
 
 
