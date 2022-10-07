@@ -75,10 +75,16 @@ def showTable():
     for row in cursor.fetchall():
         print(row)
 
-def save_to_csv(table, end_date):
-    query = f'select * from {table} WHERE DATE({table}.end_dttm) = {end_date}'
-    df = pd.read_sql(query, con)
+def save_to_csv(dt = 'now'):
+    '''Сохранение актуальных записей о пользователях на переданную дату в csv'''
+    query = f'''
+    SELECT * 
+    FROM users_hist 
+    WHERE datetime(?) between start_dttm and end_dttm and deleted_flg = 0'''
+
+    df = pd.read_sql(query, con, params=[dt])
     df.to_csv('result.csv', index= False)
+
 
 init_table()
 addUser('Gleb', 'Kolonin', 17, 4000.3)
@@ -94,6 +100,6 @@ addUser('Gleb', 'Kolonin', 18, 8000.6) # Изменение записи. Про
 removeUser('Max', 'Zdunov') # Логическое удаление пользователя
 
 showTable()
-print(datetime.today().date()) # Текущая дата
-save_to_csv('users_hist', end_date=datetime.today().date())
+# print(datetime.today().date()) # Текущая дата
+save_to_csv()
 
