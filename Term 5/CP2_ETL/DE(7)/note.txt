@@ -1,0 +1,29 @@
+# Создание исторической таблицы и её представления
+def init():
+    cursor.execute('''
+        create table if not exists empl_hist(
+            empl_id integer,
+            name varchar(128),
+            lastname varchar(128),
+            salary integer,
+            job_id varchar(128),
+            deleted_flg integer default 0,
+            start_dttm datetime default current_timestamp,
+            end_dttm datetime default (datetime('2999-12-31 23:59:59'))
+        )
+    ''')
+
+    cursor.execute('''
+        create view if not exists v_empl as
+        select 
+            empl_id
+            ,name
+            ,lastname
+            ,salary
+            ,job_id
+        from empl_hist
+        where current_timestamp between start_dttm and end_dttm
+    ''')
+
+
+
