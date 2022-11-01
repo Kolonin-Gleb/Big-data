@@ -1,0 +1,33 @@
+-- CREATE TABLE p3.GLEB_report (
+-- 	"id" serial NOT NULL,
+-- 	"region" varchar(30) NOT NULL,
+-- 	"browser" varchar(10) NOT NULL,
+-- 	CONSTRAINT "GLEB_report_pk" PRIMARY KEY ("id")
+-- );
+
+-- SELECT * FROM p3.GLEB_report;
+
+-- Получение чистых данных из DE.ip
+-- with ip as
+-- (
+-- 	select
+-- 		substr(data, 1, strpos(data, chr(9))-1) as ip,
+-- 		substr(data, strpos(data, chr(9))+1) as region
+-- 	from de.ip
+-- )
+-- SELECT * FROM ip
+
+with log as
+(
+	select
+		substr(data, 1, strpos(data, chr(9))-1) as ip,
+		to_timestamp(substr(data, strpos(data, chr(9))+3, 14), 'YYYYMMDDHH24MISS') as dt,
+		concat(split_part(data, chr(9), 5), split_part(data, chr(9), 6), split_part(data, chr(9), 7)) as link,
+		substr(split_part(data, chr(9), 8), 1, strpos(data, '5')) as browser
+		
+	from de.log
+)
+SELECT * FROM log
+
+-- 		
+-- substr(data, strpos(data, chr(9))+18, strpos(data, chr(9)))  as link
