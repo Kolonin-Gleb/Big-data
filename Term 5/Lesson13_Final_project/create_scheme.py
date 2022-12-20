@@ -104,3 +104,6 @@ transactions_03 = pd.read_csv(r'big data\data\transactions_01032021.txt', delimi
 # records = cursor.fetchall()
 # for row in records:
 #     print( row )
+
+
+
